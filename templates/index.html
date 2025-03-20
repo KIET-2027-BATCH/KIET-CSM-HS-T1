@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <style>
+      /* General styles */
+      body {
+        background-color: #f5f5f5;
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container.app {
+        margin-top: 50px;
+      }
+
+      /* Chat window styles */
+      .conversation {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+        height: 600px;
+        overflow-y: auto;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .conversation:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .heading {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .heading-avatar img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        transition: transform 0.3s ease;
+      }
+
+      .heading-avatar img:hover {
+        transform: scale(1.1);
+      }
+
+      .heading-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+        transition: color 0.3s ease;
+      }
+
+      .heading-title:hover {
+        color: #0056b3;
+      }
+
+      .message-body {
+        margin-bottom: 20px;
+      }
+
+      .message-main-sender {
+        text-align: right;
+      }
+
+      .message-main-receiver {
+        text-align: left;
+      }
+
+      .sender .message-text,
+      .receiver .message-text {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 20px;
+        max-width: 70%;
+        word-wrap: break-word;
+      }
+
+      .sender .message-text {
+        background: #007bff;
+        color: #fff;
+        border-radius: 20px 20px 0 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+      }
+
+      .sender .message-text:hover {
+        background-color: #0056b3;
+      }
+
+      .receiver .message-text {
+        background: #f1f1f1;
+        color: #333;
+        border-radius: 20px 20px 20px 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        transition: background-color 0.3s ease;
+      }
+
+      .receiver .message-text:hover {
+        background-color: #e0e0e0;
+      }
+
+      .message-main-sender .message-text {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+        border-radius: 20px 0 20px 20px;
+      }
+
+      .message-main-receiver .message-text {
+        background-color: #e1e1e1;
+        color: #333;
+        margin-right: auto;
+        border-radius: 0 20px 20px 20px;
+      }
+
+      /* Input area styles */
+      .reply {
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        background-color: #f9f9f9;
+        border-radius: 20px;
+      }
+
+      .reply-main input {
+        border: none;
+        border-radius: 25px;
+        padding: 12px 20px;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 16px;
+        margin-right: 10px;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .reply-main input:focus {
+        outline: none;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+      }
+
+      .reply-send {
+        cursor: pointer;
+        color: #007bff;
+        transition: color 0.3s ease, transform 0.2s;
+      }
+
+      .reply-send i {
+        font-size: 24px;
+      }
+
+      .reply-send:hover i {
+        color: #0056b3;
+        transform: scale(1.1);
+      }
+
+      .reply-emojis {
+        cursor: pointer;
+      }
+
+      .reply-emojis i {
+        font-size: 24px;
+        color: #007bff;
+        transition: color 0.3s ease;
+      }
+
+      .reply-emojis:hover i {
+        color: #0056b3;
+      }
+
+      /* Start over button */
+      #start-over {
+        cursor: pointer;
+        color: #007bff;
+        transition: transform 0.3s ease, color 0.3s ease;
+      }
+
+      #start-over:hover {
+        transform: scale(1.1);
+        color: #0056b3;
+      }
+
+      /* Styling for chat bubbles */
+      .message-text {
+        position: relative;
+        margin: 5px;
+        padding: 10px;
+        border-radius: 15px;
+        max-width: 70%;
+      }
+
+      /* Avatar styles */
+      .heading-avatar {
+        display: flex;
+        align-items: center;
+      }
+
+      /* Styling for emoji and send icon */
+      .reply-send:hover,
+      .reply-emojis:hover {
+        color: #007bff;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .conversation {
+          max-width: 100%;
+          height: auto;
+        }
+        .heading-title {
+          font-size: 18px;
+        }
+      }
+    </style>
+
+    <script type="text/javascript">
+      let symptoms = [];
+
+      function getSymptomsData() {
+        console.log("Fetching symptoms data...");
+      }
+
+      // Append messages to the chat window
+      function appendMessage(message, sender) {
+        var messageHTML = '<div class="row message-body">';
+        messageHTML += '<div class="col-sm-12 message-main-' + sender + '">';
+        messageHTML += '<div class="' + sender + '"><div class="message-text">' + message + '</div></div>';
+        messageHTML += '</div></div>';
+        $('#conversation').append(messageHTML);
+      }
+
+      // Handle user input and display the chatbot response
+      $(document).ready(function () {
+        // Send button click handler
+        $('#send').click(function () {
+          var message = $('#message-text').val().trim();
+          if (message.toLowerCase() === "done") {
+            appendMessage("You've entered all your symptoms. I am analyzing Now Wait Some Time.", 'receiver');
+            $('#message-text').val(''); // Clear the input field
+          } else if (message) {
+            appendMessage(message, 'sender');
+            $('#message-text').val(''); // Clear the input field
+
+            setTimeout(function() {
+              var chatbotResponse = "I understand that you have " + message + ". Please provide more symptoms or type 'Done' to finish.";
+              appendMessage(chatbotResponse, 'receiver');
+            }, 1000); // Simulated delay for response
+          }
+        });
+
+        // Start over button click handler
+        $('#start-over').click(function() {
+          $('#conversation').empty();
+          appendMessage("Welcome! I'm Medical Chatbot, but you can call me Meddy. What symptoms are you currently experiencing? When you've entered all of your symptoms, please write '<b>Done</b>'.", 'receiver');
+        });
+      });
+    </script>
+    <title>Medical Chatbot</title>
+  </head>
+
+  <body>
+    <div class="container app">
+      <div class="row app-one">
+        <div class="conversation">
+          <div class="row heading">
+            <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+              <div class="heading-avatar-icon">
+                <img src="https://bootdey.com/img/Content/avatar/avatar6.png" />
+              </div>
+            </div>
+            <h3 class="heading-title">Medical Chatbot</h3>
+            <div class="col-sm-1 col-xs-1 heading-dot pull-right">
+              <i class="fa fa-ellipsis-v fa-2x pull-right" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <div class="row message" id="conversation">
+            <div class="row message-previous">
+              <div class="col-sm-12 previous"></div>
+            </div>
+            <div class="row message-body">
+              <div class="col-sm-12 message-main-receiver">
+                <div class="receiver">
+                  <div class="message-text">
+                    Welcome! I'm Medical Chatbot, but you can call me Meddy.
+                    What symptoms are you currently experiencing? When you've
+                    entered all of your symptoms, please write '<b>Done</b>'.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row reply">
+            <div
+              id="start-over"
+              class="col-sm-1 col-xs-1 reply-emojis text-center"
+            >
+              <i class="fas fa-redo fa-2x"></i>
+            </div>
+            <div class="col-sm-10 col-xs-10 reply-main">
+              <input id="message-text" class="form-control" type="text" placeholder="Type your symptoms here..." />
+            </div>
+            <div id="send" class="col-sm-1 col-xs-1 reply-send text-center">
+              <i class="fas fa-paper-plane fa-2x" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
