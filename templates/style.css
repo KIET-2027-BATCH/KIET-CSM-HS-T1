@@ -1,0 +1,85 @@
+/* General styles */
+body {
+  background-color: #f5f5f5;
+  font-family: 'Arial', sans-serif;
+}
+
+.container.app {
+  margin-top: 50px;
+}
+
+/* Chat window styles */
+.conversation {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.heading {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.heading-avatar img {
+  border-radius: 50%;
+}
+
+.heading-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.message-body {
+  margin-bottom: 20px;
+}
+
+.message-main-sender {
+  text-align: right;
+}
+
+.message-main-receiver {
+  text-align: left;
+}
+
+.sender .message-text,
+.receiver .message-text {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 20px;
+  max-width: 70%;
+}
+
+.sender .message-text {
+  background: #007bff;
+  color: #fff;
+}
+
+.receiver .message-text {
+  background: #f1f1f1;
+  color: #333;
+}
+
+/* Input area styles */
+.reply {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  margin-top: 20px;
+}
+
+.reply-main input {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reply-send {
+  cursor: pointer;
+}
+
+.reply-emojis {
+  cursor: pointer;
+}
