@@ -2,10 +2,9 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-# Example route to render HTML page
 @app.route('/')
 def index():
-    # Pass data from Python to HTML (template)
+    
     symptoms = ["headache", "fever", "cough", "fatigue", "nausea"]
     return render_template('index.html', data=symptoms)
 
